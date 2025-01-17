@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model OrderPos {
+  id       Int    @id @default(autoincrement())
+
+  orderNumber   String
+  products       Json?
+  totalAmount    Int
+  paymentMethod  String?
+  userUUID       String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PaymentMedthod {
+  id       Int    @id @default(autoincrement())
+  name     String
+  userUUID String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Products {
+  id       Int     @id @default(autoincrement())
+  userUUID String
+  name     String
+  imageUrl String?
+  about    String
+  price    Int
+  count    Int    @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id        Int     @id @default(autoincrement())
+  uuid      String  @unique
+  email     String  @unique
+  password  String?
+  image     String?
+  firstname String?
+  lastname  String?
+  phone     String?
+
+  role   String @default("user")
+  status String @default("รอยืนยัน")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

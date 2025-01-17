@@ -1,5 +1,10 @@
+<script setup lang="ts">
+import { NuxtPage } from '#components';
+
+</script>
+
 <template>
   <div>
-    <NuxtWelcome />
+    <NuxtPage></NuxtPage>
   </div>
 </template>
