@@ -9,10 +9,23 @@
     <div class="bg-white shadow-md rounded-md mt-4 md:mt-5">
       <div class="flex flex-col lg:flex-row">
         <div class="w-full lg:w-3/5 p-3 md:p-4">
-          <p class="text-xl md:text-2xl font-semibold">สินค้าของคุณ</p>
+          <div class="flex justify-between">
+            <p class="text-xl md:text-2xl font-semibold">สินค้าของคุณ</p>
+            <div class="relative">
+              <input v-model="searchQuery" type="text" placeholder="ค้นหาสินค้า..."
+                class="input input-bordered w-full md:w-64 pr-10 text-sm" @input="handleSearch" />
+              <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </span>
+            </div>
+          </div>
           <div class="divider"></div>
           <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4">
-            <div v-for="product in products"
+            <div v-for="product in filteredProducts"
               class="border rounded-lg p-2 md:p-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
               @click="selectProduct(product)">
               <div class="flex justify-end">
@@ -142,7 +155,7 @@ const users = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null;
 const userUUID = users ? users.uuid : null;
 
 const loading = ref(false);
-
+const searchQuery = ref('');
 const products = ref([]);
 const payments = ref([])
 const selectedProducts = ref([]);
@@ -153,6 +166,33 @@ const totalPrice = computed(() => {
     return total + (product.price * product.quantity);
   }, 0);
 });
+
+const filteredProducts = computed(() => {
+  const query = searchQuery.value.toLowerCase().trim();
+  if (!query) return products.value;
+
+  return products.value.filter(product => {
+    return (
+      product.name.toLowerCase().includes(query) ||
+      product.price.toString().includes(query)
+    );
+  });
+});
+
+const debounce = (fn, delay) => {
+  let timeoutId;
+  return (...args) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => fn(...args), delay);
+  };
+};
+
+const handleSearch = debounce(() => {
+  // You can add additional search logic here if needed
+  console.log('Searching for:', searchQuery.value);
+}, 300);
+
+
 
 const fetchProducts = async () => {
   try {
