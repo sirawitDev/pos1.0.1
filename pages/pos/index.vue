@@ -300,8 +300,6 @@ const handlePayment = async () => {
 onMounted(async () => {
   await fetchProducts()
   await fetchPayment()
-
-  console.log(authStore.isAuthenticated)
 });
 
 definePageMeta({
