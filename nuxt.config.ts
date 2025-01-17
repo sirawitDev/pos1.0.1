@@ -1,4 +1,3 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
@@ -15,7 +14,7 @@ export default defineNuxtConfig({
     },
   },
 
-  ssr:false,
+  ssr: true, 
   compatibilityDate: '2025-01-17',
   modules: ['@nuxtjs/google-fonts', '@pinia/nuxt'],
   googleFonts: {

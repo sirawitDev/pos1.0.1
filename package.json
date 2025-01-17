@@ -2,11 +2,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "nuxt build",
+    "build": "prisma generate && nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "deploy:pos": "scp -i /Users/sirawitkumlungsri/Desktop/ssh/id_rsa -r .output/* root@159.223.89.29:/var/www/front-end/pos"
   },
   "devDependencies": {
     "@nuxt/devtools": "^1.0.3",
@@ -35,6 +36,7 @@
     "axios": "^1.7.9",
     "bcryptjs": "^2.4.3",
     "chart.js": "^4.4.7",
+    "express": "^4.21.2",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
     "sweetalert2": "^11.15.10",
