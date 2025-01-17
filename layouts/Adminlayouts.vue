@@ -167,9 +167,9 @@ import { useAuthStore } from '#build/imports';
 import Cookies from 'js-cookie';
 
 const users = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null;
-const firstname = users.firstname
-const lastname = users.lastname
-const role = users.role
+const firstname = users ? users.firstname : 'Unknown';
+const lastname = users ? users.lastname : 'User';
+const role = users ? users.role : 'Guest';
 
 const mobileNavOpen = ref(false);
 const authStore = useAuthStore()
