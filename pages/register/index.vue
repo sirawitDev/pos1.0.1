@@ -119,6 +119,10 @@
       </div>
     </div>
   </div>
+
+  <div v-if="loading" class="absolute inset-0 flex justify-center items-center bg-opacity-50 bg-gray-800">
+    <div class="spinner-border animate-spin border-t-4 border-green-500 rounded-full w-12 h-12"></div>
+  </div>
 </template>
 
 <script setup>
@@ -133,6 +137,8 @@ const email = ref('');
 const password = ref('');
 const phone = ref('')
 const formattedPhone = ref('');
+
+const loading = ref(false);
 
 const confirmPassword = ref('');
 const errorMessage = ref('');
@@ -205,6 +211,7 @@ const submitForm = async () => {
 
   // หากผู้ใช้ยืนยัน
   if (result.isConfirmed) {
+    loading.value = true;
     try {
       await axios.post('/api/auth/register', {
         firstname: firstname.value,
@@ -230,6 +237,8 @@ const submitForm = async () => {
         title: 'เกิดข้อผิดพลาด',
         text: errorMsg,
       });
+    } finally {
+      loading.value = false;
     }
   }
 };

@@ -17,7 +17,7 @@
           <div class="flex justify-center">
             <div class="flex flex-col w-full">
               <p>อีเมล</p>
-              <input v-model="email" type="text" class="input input-bordered">
+              <input v-model="email" type="text" class="input input-bordered" :disabled="loading">
             </div>
           </div>
 
@@ -25,8 +25,8 @@
             <div class="flex flex-col w-full">
               <p>รหัสผ่าน</p>
               <div class="relative">
-                <input v-model="password" :type="showPassword ? 'text' : 'password'"
-                  class="input input-bordered w-full" />
+                <input v-model="password" :type="showPassword ? 'text' : 'password'" class="input input-bordered w-full"
+                  :disabled="loading" />
                 <button type="button" @click="togglePasswordVisibility"
                   class="absolute inset-y-0 right-3 flex items-center text-gray-600">
                   <span v-if="showPassword">
@@ -50,6 +50,10 @@
                 </button>
               </div>
             </div>
+          </div>
+
+          <div v-if="loading" class="absolute inset-0 flex justify-center items-center bg-opacity-50 bg-gray-800">
+            <div class="spinner-border animate-spin border-t-4 border-green-500 rounded-full w-12 h-12"></div>
           </div>
 
           <div v-if="showError">
@@ -85,6 +89,7 @@ const email = ref('');
 const password = ref('');
 const authStore = useAuthStore()
 
+const loading = ref(false);
 const showError = ref(false)
 
 const showPassword = ref(false);
@@ -94,6 +99,7 @@ const togglePasswordVisibility = () => {
 };
 
 const login = async () => {
+  loading.value = true;
   try {
     const response = await axios.post('api/auth/login', {
       email: email.value,
@@ -110,6 +116,8 @@ const login = async () => {
     setTimeout(() => {
       showError.value = false;
     }, 3500);
+  } finally {
+    loading.value = false; // End loading
   }
 };
 </script>

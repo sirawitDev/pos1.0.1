@@ -60,6 +60,10 @@
       </div>
     </div>
 
+    <div v-if="loading" class="absolute inset-0 flex justify-center items-center bg-opacity-50 bg-gray-800">
+      <div class="spinner-border animate-spin border-t-4 border-green-500 rounded-full w-12 h-12"></div>
+    </div>
+
   </Userlayouts>
 </template>
 
@@ -73,6 +77,8 @@ const users = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null;
 const userUUID = users ? users.uuid : null;
 
 const router = useRouter()
+
+const loading = ref(false);
 
 const name = ref('')
 const about = ref('-')
@@ -88,7 +94,7 @@ const handleFileUpload = (event) => {
     // Create preview URL
     imagePreview.value = URL.createObjectURL(file);
 
-    console.log('file : ' , file)
+    console.log('file : ', file)
   }
 };
 
@@ -106,6 +112,7 @@ const submitForm = async () => {
   if (!isConfirmed) return;
 
   try {
+    loading.value = true;
     const formData = new FormData();
     formData.append('name', name.value);
     formData.append('image', imageFile.value);
@@ -135,11 +142,13 @@ const submitForm = async () => {
       title: 'เกิดข้อผิดพลาด',
       text: 'เกิดข้อผิดพลาดในการเพิ่มสินค้า: ' + error.message,
     });
+  } finally {
+    loading.value = false;
   }
 };
 
 onMounted(() => {
-  console.log('userUUID : ' ,userUUID)
+  console.log('userUUID : ', userUUID)
 })
 
 // definePageMeta({

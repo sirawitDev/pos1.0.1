@@ -123,6 +123,10 @@
         </div>
       </div>
     </dialog>
+
+    <div v-if="loading" class="absolute inset-0 flex justify-center items-center bg-opacity-50 bg-gray-800">
+      <div class="spinner-border animate-spin border-t-4 border-green-500 rounded-full w-12 h-12"></div>
+    </div>
   </Userlayouts>
 </template>
 
@@ -136,6 +140,8 @@ import axios from 'axios';
 
 const users = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null;
 const userUUID = users ? users.uuid : null;
+
+const loading = ref(false);
 
 const products = ref([]);
 const payments = ref([])
@@ -245,6 +251,7 @@ const handlePayment = async () => {
   });
 
   if (result.isConfirmed) {
+    loading.value = true;
     try {
       // Format products for JSON storage
       const products = selectedProducts.value.map(product => ({
@@ -287,6 +294,8 @@ const handlePayment = async () => {
         title: "เกิดข้อผิดพลาดในการชำระเงิน",
         text: error.message || "กรุณาลองใหม่อีกครั้ง"
       });
+    } finally {
+      loading.value = false;
     }
   } else {
     await Swal.fire({

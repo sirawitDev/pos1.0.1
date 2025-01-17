@@ -55,7 +55,7 @@
               </td>
               <td>
                 <div class="flex justify-center">
-                  <div class="btn bg-red-500 hover:bg-red-300">
+                  <div @click="deleteProduct(payment.id)" class="btn bg-red-500 hover:bg-red-300">
                     <Trash />
                   </div>
                 </div>
@@ -64,6 +64,10 @@
           </tbody>
         </table>
       </div>
+    </div>
+
+    <div v-if="loading" class="absolute inset-0 flex justify-center items-center bg-opacity-50 bg-gray-800">
+      <div class="spinner-border animate-spin border-t-4 border-green-500 rounded-full w-12 h-12"></div>
     </div>
   </Userlayouts>
 </template>
@@ -77,6 +81,8 @@ import axios from "axios";
 
 const isLoading = ref(false)
 const payments = ref([])
+
+const loading = ref(false);
 
 const paymentMethodName = ref('')
 
@@ -108,6 +114,7 @@ const addPaymentMethod = async () => {
 
   document.getElementById("my_modal_3").close();
 
+
   if (!paymentMethodName.value) {
     Swal.fire({
       icon: "warning",
@@ -135,6 +142,8 @@ const addPaymentMethod = async () => {
 
   if (result.isConfirmed) {
     try {
+      loading.value = true;
+
       const response = await axios.post(`/api/payment-method`, {
         name: paymentMethodName.value,
         userUUID: userUUID,
@@ -165,6 +174,8 @@ const addPaymentMethod = async () => {
           popup: 'swal-popup'
         }
       });
+    } finally {
+      loading.value = false;
     }
   } else {
     Swal.fire({
@@ -176,6 +187,55 @@ const addPaymentMethod = async () => {
         popup: 'swal-popup'
       }
     });
+  }
+};
+
+const deleteProduct = async (paymentId) => {
+  const result = await Swal.fire({
+    title: 'คุณแน่ใจหรือไม่?',
+    text: 'คุณต้องการลบรูปแบบการชำระเงินนี้หรือไม่?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'ใช่, ลบเลย!',
+    cancelButtonText: 'ยกเลิก',
+  });
+
+  if (!result.isConfirmed) {
+    return;
+  }
+
+  try {
+    loading.value = true;
+    isLoading.value = true;
+    const response = await fetch(`/api/payment-method/${paymentId}`, {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete product');
+    }
+
+    await fetchPayment();
+
+    await Swal.fire({
+      icon: 'success',
+      title: 'ลบรูปแบบการชำระเงินเรียบร้อย',
+      text: 'รูปแบบการชำระเงินถูกลบสำเร็จ',
+      timer: 2000,
+      showConfirmButton: false,
+    });
+  } catch (err) {
+    console.error('Error deleting product:', err);
+    await Swal.fire({
+      icon: 'error',
+      title: 'เกิดข้อผิดพลาด',
+      text: 'ไม่สามารถลบรูปแบบการชำระเงิน กรุณาลองใหม่อีกครั้ง',
+    });
+  } finally {
+    isLoading.value = false;
+    loading.value = false;
   }
 };
 
