@@ -70,7 +70,7 @@ import Swal from 'sweetalert2';
 import Cookies from 'js-cookie';
 
 const users = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null;
-const userUUID = users.uuid
+const userUUID = users ? users.uuid : null;
 
 const router = useRouter()
 
@@ -142,9 +142,9 @@ onMounted(() => {
   console.log('userUUID : ' ,userUUID)
 })
 
-definePageMeta({
-  middleware: 'auth',
-});
+// definePageMeta({
+//   middleware: 'auth',
+// });
 </script>
 
 

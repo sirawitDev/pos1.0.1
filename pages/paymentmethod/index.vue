@@ -81,7 +81,7 @@ const payments = ref([])
 const paymentMethodName = ref('')
 
 const users = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null;
-const userUUID = users.uuid
+const userUUID = users ? users.uuid : null;
 
 const fetchPayment = async () => {
   isLoading.value = true;

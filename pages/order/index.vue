@@ -119,7 +119,7 @@ import Swal from "sweetalert2";
 
 const isLoading = ref(false);
 const users = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null;
-const userUUID = users.uuid;
+const userUUID = users ? users.uuid : null;
 const orders = ref([]);
 
 const formatDate = (date) => {

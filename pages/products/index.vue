@@ -110,7 +110,7 @@ const isLoading = ref(false)
 const products = ref([])
 
 const users = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null;
-const userUUID = users.uuid
+const userUUID = users ? users.uuid : null;
 
 const fetchProduct = async () => {
   isLoading.value = true;
@@ -183,9 +183,9 @@ onMounted(async () => {
   console.log('products : ', products.value)
 })
 
-definePageMeta({
-  middleware: 'auth',
-});
+// definePageMeta({
+//   middleware: 'auth',
+// });
 </script>
 
 <style></style>

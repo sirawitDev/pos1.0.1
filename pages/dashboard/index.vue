@@ -96,7 +96,7 @@ import Cookies from 'js-cookie';
 import Chart from "chart.js/auto";
 
 const users = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null;
-const userUUID = users.uuid
+const userUUID = users ? users.uuid : null;
 
 const orders = ref([])
 const selectedWeek = ref("");
@@ -279,9 +279,9 @@ onMounted(async () => {
   }
 })
 
-definePageMeta({
-  middleware: 'auth',
-});
+// definePageMeta({
+//   middleware: 'auth',
+// });
 </script>
 
 <style></style>

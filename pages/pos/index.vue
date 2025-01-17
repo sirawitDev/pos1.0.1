@@ -135,7 +135,7 @@ import Swal from "sweetalert2";
 import axios from 'axios';
 
 const users = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null;
-const userUUID = users.uuid;
+const userUUID = users ? users.uuid : null;
 
 const products = ref([]);
 const payments = ref([])
@@ -302,7 +302,7 @@ onMounted(async () => {
   await fetchPayment()
 });
 
-definePageMeta({
-  middleware: 'auth',
-});
+// definePageMeta({
+//   middleware: 'auth',
+// });
 </script>
