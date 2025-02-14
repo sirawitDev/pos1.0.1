@@ -1,63 +1,74 @@
 <template>
   <Userlayouts>
-    <div class="flex justify-center items-center bg-[#FF8128] w-full h-20 shadow-md rounded-full bg-opacity-50">
-      <h2 class="sm:text-5xl text-3xl font-bold text-[#fefeff] text-stroke tracking-wide">
-        รูปแบบการชำเงิน
-      </h2>
+    <div
+      class="relative overflow-hidden bg-gradient-to-r from-orange-400 to-orange-600 w-full h-24 shadow-lg rounded-xl">
+      <div class="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
+      <div class="relative flex justify-center items-center h-full">
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white drop-shadow-md">
+          รูปแบบการชำระเงิน
+        </h2>
+      </div>
     </div>
 
-    <div>
-      <button class="btn btn-accent w-full mt-5" onclick="my_modal_3.showModal()">
-        <p class="text-white font-light">เพิ่มรูปแบบการชำระเงิน</p>
+    <div class="mt-6">
+      <button
+        class="group flex items-center justify-center w-full bg-orange-500 hover:bg-orange-600 text-white py-4 rounded-xl transition-all duration-300 hover:shadow-lg"
+        onclick="my_modal_3.showModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        <span class="text-lg font-medium">เพิ่มรูปแบบการชำระเงิน</span>
       </button>
-      <dialog id="my_modal_3" class="modal">
-        <div class="modal-box">
-          <form method="dialog">
-            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-          </form>
-          <div class="flex justify-center">
-            <h3 class="text-lg font-bold">เพิ่มรูปแบบการชำระเงิน</h3>
-          </div>
-
-          <div class="mt-5">
-            <input v-model="paymentMethodName" type="text" class="input input-bordered w-full">
-            <p class="text-red-500 text-sm">*ตัวอย่าง = เงินสด , โอนเงิน</p>
-          </div>
-
-          <div class="mt-3">
-            <div @click="addPaymentMethod" class="btn btn-accent w-full">
-              <p class="text-white font-light">ยืนยัน</p>
-            </div>
-          </div>
-        </div>
-      </dialog>
     </div>
 
-    <div class="max-w-xl mx-auto">
-      <div class="overflow-x-auto rounded-lg border-4 border-slate-500 mb-5 mt-5">
-        <div v-if="payments.length === 0" class="text-center py-10">
-          <p class="text-lg text-red-500 font-medium">คุณยังไม่มีรูปแบบการชำระเงิน</p>
+    <div class="mt-6 max-w-2xl mx-auto">
+      <!-- Loading State -->
+      <div v-if="isLoading" class="flex justify-center items-center h-48">
+        <div class="animate-spin rounded-full h-12 w-12 border-4 border-orange-500 border-t-transparent"></div>
+      </div>
+
+      <div v-else-if="payments.length === 0" class="bg-white rounded-xl shadow-md p-8 text-center">
+        <div class="text-gray-400 mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+          </svg>
         </div>
-        <table v-else class="table">
+        <p class="text-xl font-medium text-gray-800">ยังไม่มีรูปแบบการชำระเงิน</p>
+        <p class="text-gray-500 mt-2">เริ่มต้นเพิ่มรูปแบบการชำระเงินของคุณ</p>
+      </div>
+
+      <!-- Payment Methods Table -->
+      <div v-else class="bg-white rounded-xl shadow-md overflow-hidden">
+        <table class="w-full">
           <thead>
-            <tr class="bg-slate-500 text-white text-base">
-              <th>
-                <p class="text-center">รูปแบบการชำระเงิน</p>
-              </th>
-              <th></th>
+            <tr class="bg-gray-50 border-b">
+              <th class="px-6 py-4 text-sm font-medium text-gray-500 text-start border-r-2">รูปแบบการชำระเงิน</th>
+              <th class="px-6 py-4 text-sm font-medium text-gray-500 w-24 ">จัดการ</th>
             </tr>
           </thead>
-          <tbody>
-            <!-- row 1 -->
-            <tr v-for="payment in payments">
-              <td class="border-r-4 border-slate-500">
-                <p class="text-center text-lg">{{ payment.name }}</p>
+          <tbody class="divide-y divide-gray-200">
+            <tr v-for="payment in payments" :key="payment.id" class="hover:bg-gray-50 transition-colors">
+
+              <td class="px-6 py-4 border-r-2">
+                <div class="flex items-center justify-start">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mr-3" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z" />
+                  </svg>
+                  <span class="font-medium text-gray-800">{{ payment.name }}</span>
+                </div>
               </td>
-              <td>
+
+              <td class="px-6 py-4">
                 <div class="flex justify-center">
-                  <div @click="deleteProduct(payment.id)" class="btn bg-red-500 hover:bg-red-300">
-                    <Trash />
-                  </div>
+                  <button @click="deleteProduct(payment.id)"
+                    class="btn bg-red-500 hover:bg-red-700 text-red-600 transition-colors">
+                    <Trash class="" />
+                  </button>
                 </div>
               </td>
             </tr>
@@ -66,8 +77,40 @@
       </div>
     </div>
 
-    <div v-if="loading" class="absolute inset-0 flex justify-center items-center bg-opacity-50 bg-gray-800">
-      <div class="spinner-border animate-spin border-t-4 border-green-500 rounded-full w-12 h-12"></div>
+    <dialog id="my_modal_3" class="modal">
+      <div class="modal-box max-w-sm bg-white rounded-xl p-6">
+        <form method="dialog">
+          <button class="absolute right-4 top-4 text-gray-400 hover:text-gray-600 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </form>
+
+        <div class="text-center mb-6">
+          <h3 class="text-xl font-bold text-gray-800">เพิ่มรูปแบบการชำระเงิน</h3>
+        </div>
+
+        <div class="space-y-4">
+          <div>
+            <input v-model="paymentMethodName" type="text" placeholder="ระบุรูปแบบการชำระเงิน"
+              class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all">
+            <p class="mt-2 text-sm text-gray-500">
+              ตัวอย่าง: <span class="text-orange-500">เงินสด, โอนเงิน</span>
+            </p>
+          </div>
+
+          <button @click="addPaymentMethod"
+            class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 rounded-lg transition-colors">
+            ยืนยัน
+          </button>
+        </div>
+      </div>
+    </dialog>
+
+    <div v-if="loading" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50">
+      <div class="animate-spin rounded-full h-16 w-16 border-4 border-orange-500 border-t-transparent"></div>
     </div>
   </Userlayouts>
 </template>
