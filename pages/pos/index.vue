@@ -1,99 +1,121 @@
 <template>
   <Userlayouts>
-    <div class="flex justify-center items-center bg-[#FF8128] w-full h-16 md:h-20 shadow-md rounded-full bg-opacity-50">
-      <h2 class="text-2xl md:text-3xl lg:text-5xl font-bold text-[#fefeff] text-stroke tracking-wide">
-        ขายสินค้า
-      </h2>
+    <div
+      class="relative overflow-hidden bg-gradient-to-r from-orange-400 to-orange-600 w-full h-20 md:h-24 shadow-lg rounded-xl">
+      <div class="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
+      <div class="relative flex justify-center items-center h-full">
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white drop-shadow-md">
+          ขายสินค้า
+        </h2>
+      </div>
     </div>
 
-    <div class="bg-white shadow-md rounded-md mt-4 md:mt-5">
+
+    <div class="bg-white shadow-lg rounded-xl mt-6 overflow-hidden">
       <div class="flex flex-col lg:flex-row">
-        <div class="w-full lg:w-3/5 p-3 md:p-4">
-          <div class="flex justify-between">
-            <p class="text-xl md:text-2xl font-semibold">สินค้าของคุณ</p>
-            <div class="relative">
+        <div class="w-full lg:w-3/5 p-4 md:p-6">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <p class="text-2xl md:text-3xl font-bold text-gray-800">สินค้าของคุณ</p>
+            <div class="relative w-full md:w-64">
               <input v-model="searchQuery" type="text" placeholder="ค้นหาสินค้า..."
-                class="input input-bordered w-full md:w-64 pr-10 text-sm" @input="handleSearch" />
-              <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                  stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </span>
+                class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200 pl-10"
+                @input="handleSearch" />
+              <svg xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
             </div>
           </div>
-          <div class="divider"></div>
-          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4">
+
+          <div class="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent my-6"></div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             <div v-for="product in filteredProducts"
-              class="border rounded-lg p-2 md:p-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+              class="group bg-white rounded-xl border border-gray-200 p-3 transition-all duration-300 hover:shadow-xl hover:scale-105 cursor-pointer"
               @click="selectProduct(product)">
               <div class="flex justify-end">
-                <p class="text-[12px]">ขายไปแล้ว <span class="text-green-500">{{ product.count }}</span></p>
-              </div>
-              <div class="mt-2 md:mt-3">
-                <img v-if="product.imageUrl" :src="product.imageUrl" alt="Product Image"
-                  class="w-20 h-16 md:w-28 md:h-24 rounded-md mx-auto shadow-md object-cover" />
-                <span v-else class="text-sm md:text-base">ไม่มีรูปภาพ</span>
-              </div>
-              <div class="mt-2 md:mt-3 h-8 md:h-10">
-                <p class="font-semibold text-sm md:text-base line-clamp-2">
-                  {{ product.name }}
+                <p class="text-sm text-gray-600">
+                  ขายไปแล้ว <span class="text-green-500 font-semibold">{{ product.count }}</span>
                 </p>
               </div>
-              <div class="flex justify-end">
-                <p class="text-sm md:text-base">ราคา <span class="text-red-500">{{ product.price }}</span> บาท</p>
+              <div class="mt-3 aspect-square rounded-lg overflow-hidden bg-gray-100">
+                <img v-if="product.imageUrl" :src="product.imageUrl" :alt="product.name"
+                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
+                <div v-else class="w-full h-full flex items-center justify-center text-gray-400">
+                  ไม่มีรูปภาพ
+                </div>
               </div>
-
+              <div class="mt-3">
+                <p class="font-medium text-gray-800 line-clamp-2 h-12">
+                  {{ product.name }}
+                </p>
+                <p class="mt-2 text-right font-bold text-orange-600">
+                  ฿{{ product.price.toLocaleString() }}
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="w-full lg:w-2/5 p-3 md:p-4">
-          <p class="text-xl md:text-2xl font-semibold">รายการสินค้าที่เลือก</p>
-          <div class="divider"></div>
-          <div v-if="selectedProducts.length === 0">
-            <p class="text-sm md:text-base">ยังไม่มีสินค้าในรายการที่เลือก</p>
+        <div class="w-full lg:w-2/5 p-4 md:p-6 bg-gray-50">
+          <p class="text-2xl md:text-3xl font-bold text-gray-800">รายการสินค้าที่เลือก</p>
+          <div class="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent my-6"></div>
+
+          <div v-if="selectedProducts.length === 0" class="text-center py-10">
+            <div class="text-gray-400 mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              </svg>
+            </div>
+            <p class="text-gray-500">ยังไม่มีสินค้าในรายการที่เลือก</p>
           </div>
-          <div v-else class="space-y-2">
-            <div v-for="product in selectedProducts" :key="product.uuid"
-              class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-2 md:p-4 border rounded-md w-full">
-              <div class="flex flex-col sm:flex-row items-start sm:items-center w-full gap-2 md:gap-4">
-                <div class="w-full sm:w-1/3">
-                  <div class="flex justify-center">
-                    <img :src="product.imageUrl" alt="product-image" class=" rounded-md w-[50%] sm:w-[80%] h-24">
-                  </div>
-                  <p class="text-sm md:text-base line-clamp-2 text-center mt-1 font-semibold">{{ product.name }}</p>
+
+          <div v-else class="space-y-4">
+            <div v-for="product in selectedProducts" :key="product.uuid" class="bg-white rounded-xl p-4 shadow-sm">
+              <div class="flex gap-4">
+                <div class="w-24 h-24 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                  <img :src="product.imageUrl" :alt="product.name" class="w-full h-full object-cover" />
                 </div>
-
-                <div class="flex justify-between items-center w-full sm:w-2/3">
-                  <div class="flex items-center">
-                    <button @click="decreaseQuantity(product)"
-                      class="px-2 md:px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300 text-sm md:text-base">-</button>
-                    <p class="w-6 md:w-8 text-center text-sm md:text-base">{{ product.quantity }}</p>
-                    <button @click="increaseQuantity(product)"
-                      class="px-2 md:px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300 text-sm md:text-base">+</button>
+                <div class="flex-1">
+                  <p class="font-medium text-gray-800 line-clamp-2">{{ product.name }}</p>
+                  <div class="mt-2 flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                      <button @click="decreaseQuantity(product)"
+                        class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
+                        -
+                      </button>
+                      <span class="w-8 text-center">{{ product.quantity }}</span>
+                      <button @click="increaseQuantity(product)"
+                        class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
+                        +
+                      </button>
+                    </div>
+                    <p class="font-bold text-orange-600">
+                      ฿{{ (product.price * product.quantity).toLocaleString() }}
+                    </p>
                   </div>
-                  <p class="text-red-500 text-sm md:text-base ml-2 md:ml-4">
-                    {{ (product.price * product.quantity).toLocaleString() }} บาท
-                  </p>
-
-                  <button @click="removeProduct(product)" class="btn btn-xs md:btn-sm btn-accent">
-                    <Trash />
+                </div>
+                <div class="flex items-center">
+                  <button @click="removeProduct(product)"
+                    class="btn bg-red-500 hover:bg-red-700 text-gray-400 hover:text-red-500 transition-colors">
+                    <Trash class="" />
                   </button>
                 </div>
               </div>
-
             </div>
 
-            <div class="mt-3 md:mt-4 border-t pt-3 md:pt-4">
+            <div class="mt-6 p-4 bg-white rounded-xl shadow-sm">
               <div class="flex justify-between items-center">
-                <p class="font-semibold text-base md:text-lg">รวมทั้งหมด:</p>
-                <p class="text-lg md:text-xl text-red-500 font-bold">{{ totalPrice.toLocaleString() }} บาท</p>
+                <p class="text-lg font-semibold text-gray-800">รวมทั้งหมด:</p>
+                <p class="text-2xl font-bold text-orange-600">฿{{ totalPrice.toLocaleString() }}</p>
               </div>
-            </div>
-            <div class="mt-2 md:mt-3">
-              <button class="btn btn-accent w-full text-white text-sm md:text-base" onclick="my_modal_3.showModal()">
+              <button
+                class="mt-4 w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 rounded-lg transition-colors"
+                onclick="my_modal_3.showModal()">
                 ชำระเงิน
               </button>
             </div>
@@ -103,42 +125,42 @@
     </div>
 
     <dialog id="my_modal_3" class="modal">
-      <div class="modal-box max-w-sm md:max-w-md">
+      <div class="modal-box max-w-sm md:max-w-md bg-white rounded-xl p-6">
         <form method="dialog">
-          <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+          <button class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4">✕</button>
         </form>
-        <div class="flex justify-center">
-          <h3 class="text-base md:text-lg font-bold">รูปแบบการชำระเงิน</h3>
-        </div>
-        <div>
-          <label class="form-control w-full">
-            <select class="select select-bordered mt-3 w-full text-sm md:text-base" v-model="selectedPaymentMethod">
-              <option disabled selected>เลือกรูปแบบการชำระเงิน</option>
-              <option v-for="payment in payments" :key="payment.id" :value="payment.name">
-                {{ payment.name }}
-              </option>
-            </select>
-          </label>
+        <h3 class="text-xl font-bold text-center text-gray-800">รูปแบบการชำระเงิน</h3>
 
-          <div v-if="payments.length === 0">
-            <p class="text-red-500 text-center">กรุณาเพิ่มรูปแบบการชำระเงินก่อนทำรายการสินค้า</p>
+        <div class="mt-6">
+          <select
+            class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+            v-model="selectedPaymentMethod">
+            <option disabled selected>เลือกรูปแบบการชำระเงิน</option>
+            <option v-for="payment in payments" :key="payment.id" :value="payment.name">
+              {{ payment.name }}
+            </option>
+          </select>
 
-            <RouterLink to="/paymentmethod" class="btn btn-accent w-full mt-3">
-              <p class="font-light text-white">เพิ่มรูปแบบการชำระเงิน</p>
+          <div v-if="payments.length === 0" class="mt-4">
+            <p class="text-red-500 text-center mb-4">กรุณาเพิ่มรูปแบบการชำระเงินก่อนทำรายการสินค้า</p>
+            <RouterLink to="/paymentmethod"
+              class="block w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 rounded-lg text-center transition-colors">
+              เพิ่มรูปแบบการชำระเงิน
             </RouterLink>
           </div>
 
-          <div v-if="payments.length !== 0" class=" mt-3">
-            <div @click="handlePayment" class="btn btn-accent w-full">
-              <p class="text-white">ชำระเงิน</p>
-            </div>
+          <div v-if="payments.length !== 0" class="mt-4">
+            <button @click="handlePayment"
+              class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 rounded-lg transition-colors">
+              ชำระเงิน
+            </button>
           </div>
         </div>
       </div>
     </dialog>
 
-    <div v-if="loading" class="absolute inset-0 flex justify-center items-center bg-opacity-50 bg-gray-800">
-      <div class="spinner-border animate-spin border-t-4 border-green-500 rounded-full w-12 h-12"></div>
+    <div v-if="loading" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center">
+      <div class="animate-spin rounded-full h-16 w-16 border-4 border-orange-500 border-t-transparent"></div>
     </div>
   </Userlayouts>
 </template>

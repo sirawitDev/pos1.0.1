@@ -1,91 +1,97 @@
 <template>
   <Userlayouts>
-    <div class="flex justify-center items-center bg-[#FF8128] w-full h-20 shadow-md rounded-full mt-1 bg-opacity-70">
-      <h2 class="sm:text-6xl text-4xl font-bold text-[#fefeff] text-stroke tracking-wide">DASHBOARD</h2>
+    <div class="relative overflow-hidden bg-gradient-to-r from-orange-400 to-orange-600 rounded-xl shadow-lg mb-8">
+      <div class="absolute inset-0 bg-pattern opacity-10"></div>
+      <div class="flex justify-center items-center h-32 px-6">
+        <h1 class="text-4xl md:text-6xl font-extrabold text-white tracking-wider">
+          DASHBOARD
+        </h1>
+      </div>
     </div>
-
-    <div class="flex justify-center mt-5 p-5 bg-white shadow-md rounded-md">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 w-full">
-        <div class="card bg-[#2584FF] w-full shadow-xl h-44 transform-transition bg-opacity-65">
-          <h2 class="card-title text-white font-light text-3xl pl-5 pt-5">รายได้ทั้งหมด</h2>
-          <div class="flex mt-8">
-            <div class="flex ml-5 w-full mt-8">
-              <p class="text-white text-4xl mt-1">
-                {{ totalRevenue }} บาท
-              </p>
-            </div>
-            <div class="absolute bottom-2 right-1 justify-end mr-5">
-              <img src="/public/moneytotal.png" alt="logo_user" class="w-[100px]">
+    <div class="p-6 bg-gray-50 rounded-2xl shadow-sm">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="relative group">
+          <div class="absolute inset-0 bg-blue-600 rounded-2xl transform transition-transform group-hover:scale-[1.02]">
+          </div>
+          <div
+            class="relative p-6 bg-[#2584FF] rounded-2xl transform transition-all duration-300 hover:translate-x-[2px] hover:-translate-y-[2px]">
+            <div class="space-y-4">
+              <h2 class="text-xl text-white/90 font-light">รายได้ทั้งหมด</h2>
+              <div class="flex justify-between items-end">
+                <p class="text-3xl font-bold text-white">{{ totalRevenue }} บาท</p>
+                <img src="/public/moneytotal.png" alt="revenue" class="w-16 h-16 opacity-80" />
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="card bg-[#00AC97] w-full h-44 shadow-xl transform-transition bg-opacity-65">
-          <h2 class="card-title text-white font-light text-3xl pl-5 pt-5">รายได้วันนี้</h2>
-          <div class="flex mt-8">
-            <div class="flex-1 ml-5 mt-8">
-              <p class="text-white text-4xl mt-2">
-                {{ todayRevenue }} บาท
-              </p>
-            </div>
-            <div class="absolute bottom-2 right-0 justify-end mr-5">
-              <img src="/public/moneyday.png" alt="logo_user" class="w-[100px]">
+        <div class="relative group">
+          <div class="absolute inset-0 bg-teal-600 rounded-2xl transform transition-transform group-hover:scale-[1.02]">
+          </div>
+          <div
+            class="relative p-6 bg-[#00AC97] rounded-2xl transform transition-all duration-300 hover:translate-x-1 hover:-translate-y-1">
+            <div class="space-y-4">
+              <h2 class="text-xl text-white/90 font-light">รายได้วันนี้</h2>
+              <div class="flex justify-between items-end">
+                <p class="text-3xl font-bold text-white">{{ todayRevenue }} บาท</p>
+                <img src="/public/moneyday.png" alt="today" class="w-16 h-16 opacity-80" />
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="card bg-[#515262] w-full h-44 shadow-xl transform-transition bg-opacity-65">
-          <h2 class="card-title text-white font-light text-2xl pl-5 pt-5">จำนวนการทำรายการวันนี้</h2>
-          <div class="flex mt-8">
-            <div class="flex-1 ml-5 mt-8">
-              <p class="text-white text-4xl mt-2">
-                {{ todayOrderCount }} รายการ
-              </p>
-            </div>
-            <div class="absolute bottom-2 right-0 justify-end mr-5">
-              <img src="/public/document.png" alt="logo_user" class="w-[100px]">
+        <div class="relative group">
+          <div class="absolute inset-0 bg-gray-700 rounded-2xl transform transition-transform group-hover:scale-[1.02]">
+          </div>
+          <div
+            class="relative p-6 bg-[#515262] rounded-2xl transform transition-all duration-300 hover:translate-x-1 hover:-translate-y-1">
+            <div class="space-y-4">
+              <h2 class="text-xl text-white/90 font-light">จำนวนการทำรายการวันนี้</h2>
+              <div class="flex justify-between items-end">
+                <p class="text-3xl font-bold text-white">{{ todayOrderCount }} รายการ</p>
+                <img src="/public/document.png" alt="orders" class="w-16 h-16 opacity-80" />
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="card bg-[#f0ae2b] w-full h-44 shadow-xl transform-transition bg-opacity-65">
-          <h2 class="card-title text-white font-light text-2xl pl-5 pt-5">รายการทั้งหมด</h2>
-          <div class="flex mt-8">
-            <div class="flex-1 ml-5 mt-8">
-              <p class="text-white text-4xl mt-2">
-                {{ totalOrderCount }} รายการ
-              </p>
-            </div>
-            <div class="absolute bottom-2 right-0 justify-end mr-5">
-              <img src="/public/docall.png" alt="logo_user" class="w-[100px]">
+        <div class="relative group">
+          <div
+            class="absolute inset-0 bg-yellow-500 rounded-2xl transform transition-transform group-hover:scale-[1.02]">
+          </div>
+          <div
+            class="relative p-6 bg-[#f0ae2b] rounded-2xl transform transition-all duration-300 hover:translate-x-1 hover:-translate-y-1">
+            <div class="space-y-4">
+              <h2 class="text-xl text-white/90 font-light">รายการทั้งหมด</h2>
+              <div class="flex justify-between items-end">
+                <p class="text-3xl font-bold text-white">{{ totalOrderCount }} รายการ</p>
+                <img src="/public/docall.png" alt="total" class="w-16 h-16 opacity-80" />
+              </div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
 
-    <div class="flex">
-      <div class="flex-1 flex flex-col items-center">
-        <div class="mt-5">
-          <label for="week-selector" class="text-lg font-bold">เลือกสัปดาห์:</label>
-          <select id="week-selector" v-model="selectedWeek" class="ml-2 p-2 border rounded-md">
+    <!-- Chart Section -->
+    <div class="mt-8 p-6 bg-white rounded-2xl shadow-sm">
+      <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4 md:mb-0">รายงานรายได้รายสัปดาห์</h2>
+        <div class="flex flex-col sm:flex-row items-center space-x-4">
+          <label for="week-selector" class="text-gray-600 font-medium">เลือกสัปดาห์:</label>
+          <select id="week-selector" v-model="selectedWeek"
+            class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-colors">
             <option v-for="week in availableWeeks" :key="week" :value="week">
               {{ formatDateRange(week) }}
             </option>
           </select>
         </div>
-
-        <div class="mt-5 w-full">
-          <canvas id="revenueChart"></canvas>
-        </div>
       </div>
 
-      <div class="flex-1">
-
+      <div class="w-full h-[400px]">
+        <canvas id="revenueChart"></canvas>
       </div>
     </div>
-
   </Userlayouts>
 </template>
 
@@ -114,7 +120,7 @@ const todayRevenue = computed(() => {
 });
 
 const totalOrderCount = computed(() => {
-  return orders.value.length; // Total number of orders
+  return orders.value.length;
 });
 
 
@@ -219,8 +225,8 @@ const updateChart = () => {
   const ctx = document.getElementById("revenueChart").getContext("2d");
 
   if (chartInstance.value) {
-    chartInstance.value.data.labels = weekLabels.value; // Update labels to include dates
-    chartInstance.value.data.datasets[0].data = dailyRevenueForSelectedWeek.value; // Update data
+    chartInstance.value.data.labels = weekLabels.value;
+    chartInstance.value.data.datasets[0].data = dailyRevenueForSelectedWeek.value;
     chartInstance.value.update();
   } else {
     chartInstance.value = new Chart(ctx, {
@@ -256,7 +262,6 @@ const updateChart = () => {
           y: {
             beginAtZero: true,
             ticks: {
-              // Format the y-axis values with "บาท" appended
               callback: function (value) {
                 return value + " บาท";
               },
@@ -284,4 +289,8 @@ onMounted(async () => {
 // });
 </script>
 
-<style></style>
+<style scoped>
+.bg-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+</style>

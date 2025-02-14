@@ -1,98 +1,92 @@
 <template>
   <Userlayouts>
-    <div class="flex justify-center items-center bg-[#FF8128] w-full h-20 shadow-md rounded-full bg-opacity-50">
-      <h2 class="sm:text-5xl text-3xl font-bold text-[#fefeff] text-stroke tracking-wide">
-        สินค้าภายในร้าน
-      </h2>
+    <div
+      class="relative overflow-hidden bg-gradient-to-r from-orange-400 to-orange-600 w-full h-24 shadow-lg rounded-xl">
+      <div class="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
+      <div class="relative flex justify-center items-center h-full">
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white drop-shadow-md">
+          สินค้าภายในร้าน
+        </h2>
+      </div>
     </div>
 
-    <div class="mt-5">
-      <RouterLink to="/products/create" class="w-full btn btn-accent">
-        <p class="text-white font-light">เพิ่มสินค้า</p>
+    <div class="mt-6">
+      <RouterLink to="/products/create"
+        class="group flex items-center justify-center w-full bg-orange-500 hover:bg-orange-600 text-white py-4 rounded-xl transition-all duration-300 hover:shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        <span class="text-lg font-medium">เพิ่มสินค้า</span>
       </RouterLink>
     </div>
-    <div v-if="isLoading" class="flex justify-center items-center h-32">
-      <span class="loading loading-spinner text-accent"></span>
+
+    <div v-if="isLoading" class="flex justify-center items-center h-64">
+      <div class="animate-spin rounded-full h-16 w-16 border-4 border-orange-500 border-t-transparent"></div>
     </div>
-    <div v-else class="max-w-5xl mx-auto">
-      <div class="overflow-x-auto rounded-lg border-4 border-slate-500 mb-5 mt-5">
-        <div v-if="products.length === 0" class="text-center py-10">
-          <p class="text-lg text-red-500 font-medium">ยังไม่มีสินค้าในร้าน</p>
+
+    <div v-else class="mt-6">
+      <div v-if="products.length === 0" class="bg-white rounded-xl shadow-md p-8 text-center">
+        <div class="text-gray-400 mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+          </svg>
         </div>
-        <table v-else class="hidden md:table">
+        <p class="text-xl font-medium text-gray-800">ยังไม่มีสินค้าในร้าน</p>
+        <p class="text-gray-500 mt-2">เริ่มต้นเพิ่มสินค้าของคุณเลย</p>
+      </div>
+
+      <div v-else class="bg-white rounded-xl shadow-md overflow-hidden">
+        <table class="hidden md:table w-full">
           <thead>
-            <tr class="bg-slate-500 text-white text-base">
-              <th>
-                <p class="text-center font-medium">ลำดับ</p>
-              </th>
-              <th>
-                <p class="text-center font-medium">รูป</p>
-              </th>
-              <th>
-                <p class="text-center font-medium">ชื่อ</p>
-              </th>
-              <th>
-                <p class="text-center font-medium">ราคา</p>
-              </th>
-              <th></th>
+            <tr class="bg-gray-50 border-b">
+              <th class="px-6 py-4 text-sm font-medium text-gray-500">ลำดับ</th>
+              <th class="px-6 py-4 text-sm text-center font-medium text-gray-500">รูป</th>
+              <th class="px-6 py-4 text-sm text-center font-medium text-gray-500">ชื่อ</th>
+              <th class="px-6 py-4 text-sm text-center font-medium text-gray-500">ราคา</th>
+              <th class="px-6 py-4 text-sm text-center font-medium text-gray-500">ขายไปแล้ว</th>
+              <th class="px-6 py-4 text-sm text-center font-medium text-gray-500">จัดการ</th>
             </tr>
           </thead>
-          <tbody>
-            <!-- row 1 -->
-            <tr v-for="(product, index) in products" class="text-base border-b-4 border-slate-500">
-              <th class="">
-                <p class="text-center">{{ index + 1 }}</p>
-              </th>
-              <td class="">
+          <tbody class="divide-y divide-gray-200">
+            <tr v-for="(product, index) in products" :key="product.id" class="hover:bg-gray-50 transition-colors">
+              <td class="px-6 py-4 text-center text-gray-500">{{ index + 1 }}</td>
+              <td class="px-6 py-4">
+                <img :src="product.imageUrl" :alt="product.name" class="w-20 h-20 object-cover rounded-lg mx-auto">
+              </td>
+              <td class="px-6 py-4 text-center font-medium text-gray-800">{{ product.name }}</td>
+              <td class="px-6 py-4 text-center text-orange-600 font-medium">{{ product.price }} บาท</td>
+              <td class="px-6 py-4 text-center text-green-600 font-medium">{{ product.count }}</td>
+              <td class="px-6 py-4">
                 <div class="flex justify-center">
-                  <img :src="product.imageUrl" alt="pic-products" class="w-24 h-24 rounded-md">
-                </div>
-              </td>
-              <td class="">
-                <p class="text-center">{{ product.name }}</p>
-              </td>
-
-              <td class="">
-                <p class="text-center">{{ product.price }} บาท</p>
-              </td>
-              <td>
-                <div class="flex justify-center">
-                  <div @click="deleteProduct(product.id)" class="btn bg-red-500 hover:bg-red-300">
-                    <Trash />
-                  </div>
+                  <button @click="deleteProduct(product.id)"
+                    class="btn bg-red-500 hover:bg-red-700 text-red-600 transition-colors">
+                    <Trash class="" />
+                  </button>
                 </div>
               </td>
             </tr>
           </tbody>
         </table>
 
-        <div class="md:hidden">
-          <div v-for="product in products" :key="product.id" class="p-4 border-b-4 border-slate-500">
-            <div class="flex gap-3 mb-3 justify-between">
-              <div class="flex gap-3">
-                <img :src="product.imageUrl" alt="" class="w-16 h-16 rounded-md object-cover">
-                <div class="flex flex-col justify-center">
-                  <p class="font-medium">{{ product.name }}</p>
-                  <div class="flex gap-2">
-                    <p>ขายแล้ว :</p>
-                    <p class="text-red-500">{{ product.count }}</p>
-                  </div>
-                </div>
+        <div class="md:hidden divide-y divide-gray-200">
+          <div v-for="product in products" :key="product.id" class="p-4 space-y-4">
+            <div class="flex items-center space-x-4">
+              <img :src="product.imageUrl" :alt="product.name" class="w-20 h-20 object-cover rounded-lg">
+              <div class="flex-1">
+                <h3 class="font-medium text-gray-800">{{ product.name }}</h3>
+                <p class="text-orange-600 font-medium mt-1">{{ product.price }} บาท</p>
+                <p class="text-sm text-gray-500 mt-1">
+                  ขายแล้ว <span class="text-green-600 font-medium">{{ product.count }}</span>
+                </p>
               </div>
-
-              <button @click="deleteProduct(product.id)" class="btn bg-red-500 hover:bg-red-300 p-2">
-                <Trash class="" />
+              <button @click="deleteProduct(product.id)"
+                class="flex items-center justify-center w-10 h-10 rounded-full bg-red-100 hover:bg-red-200 text-red-600 transition-colors">
+                <Trash class="w-5 h-5" />
               </button>
             </div>
-
-            <div class="space-y-2 text-sm">
-              <div class="flex justify-between">
-                <p class="text-base">ราคา:</p>
-                <p class="font-medium text-base"><span class="text-red-500">{{ product.price }}</span> บาท</p>
-              </div>
-            </div>
-
-
           </div>
         </div>
       </div>
