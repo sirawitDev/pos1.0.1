@@ -1,48 +1,45 @@
-# Nuxt Example
+# POS System
 
-Deploy your [Nuxt](https://nuxt.com) project to Vercel with zero configuration.
+## Features
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/vercel/tree/main/examples/nuxtjs&template=nuxtjs)
+### Authentication
+- **Register**: Users must register and wait for rights confirmation before logging in.
+- **Login**: Only approved users can access the system.
 
-_Live Example: https://nuxtjs-template.vercel.app_
+### Dashboard
+Displays key business insights:
+- Total revenue
+- Today's revenue
+- Total transactions today
+- Total sales records
 
-Look at the [Nuxt 3 documentation](https://v3.nuxtjs.org) to learn more.
+### Product Management
+- Add new products with the following details:
+  - Product name
+  - Product image
+  - Price
+  - Description
 
-## Setup
+### POS System
+- Select products from the store to create a transaction
+- Display total price
+- Increase/decrease product quantity
+- Choose payment method
 
-Make sure to install the dependencies:
+### Sales Records
+- View transaction history with details
 
-```bash
-# yarn
-yarn
+### Payment Management
+- Add custom payment methods
 
-# npm
-npm install
+## Tech Stack
+- **Framework**: NuxtJS
+- **Database**: PostgreSQL
+- **Styling**: Tailwind CSS
 
-# pnpm
-pnpm install --shamefully-hoist
-```
-
-## Development Server
-
-Start the development server on http://localhost:3000
-
-```bash
-npm run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-npm run build
-```
-
-Locally preview production build:
-
-```bash
-npm run preview
-```
-
-Checkout the [deployment documentation](https://nuxt.com/docs/getting-started/deployment#presets) for more information.
+## Usage
+1. Register a new account and wait for approval.
+2. Login and access the dashboard.
+3. Add new products to the system.
+4. Use the POS system to process transactions.
+5. View sales records and manage payments.
